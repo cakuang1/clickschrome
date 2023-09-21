@@ -1,0 +1,30 @@
+{
+    "manifest_version": 3,
+    "name": "Click Tracker",
+    "version": "1.0",
+    "description": "Track mouse clicks and send data to background script",
+    "permissions": [
+      "activeTab"
+    ],
+    "host_permissions": [
+        "https://*/*",
+        "http://*/*"
+      ],
+      
+    "background": {
+      "service_worker": "background.js",
+      "type": "module"
+    },
+    "content_scripts": [
+      {
+        "matches": [
+          "<all_urls>"
+        ],
+        "js": [
+          "content.js"
+        ]
+      }
+    ]
+
+  }
+  
