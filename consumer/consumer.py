@@ -27,15 +27,24 @@ CREATE TABLE IF NOT EXISTS click_data (
 """)
 
 
-def callback(ch, method, properties, body):
-    
-
-
-
+def callback(ch, method, properties, body):    
     print("Received message:", body)
+    try:
+        x = body.get('x')
+        y = body.get('y')
+        placeclicked = body.get('targetElement')
+        timestamp = body.get('timestamp')
+        sql = "INSERT INTO click_data (x, y, placeclicked, timestamp) VALUES (%s, %s, %s, %s)"
+        values = (x, y, placeclicked, timestamp)
+        postgres_cursor.execute(sql, values)
+        postgres_connection.commit()  
+        print("Data inserted successfully.")
+    except Exception as e:
+        print("Error inserting data:", str(e))
 
 
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost',5672))
+
+connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq',5672))
 channel = connection.channel()
 queue_name = 'clicks'
 channel.queue_declare(queue=queue_name)
