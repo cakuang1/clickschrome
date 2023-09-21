@@ -1,18 +1,20 @@
 from flask import Flask, request, jsonify
 import pika
 import json
+import os
 
 app = Flask(__name__)
 
-
-
+# Read RabbitMQ connection details from environment variables
+rabbitmq_host = os.environ.get('RABBITMQ_HOST', 'localhost')
+rabbitmq_port = os.environ.get('RABBITMQ_PORT', '5672')
 rabbitmq_queue = 'clicks'
 
 @app.route('/send_click', methods=['POST'])
 def send_click():
     try:
         click_data = request.json
-        connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq',5672))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(rabbitmq_host,rabbitmq_port))
         channel = connection.channel()
         channel.queue_declare(queue=rabbitmq_queue, durable=False)
         channel.basic_publish(exchange='', routing_key=rabbitmq_queue, body=json.dumps(click_data))

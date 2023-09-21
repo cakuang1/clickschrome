@@ -1,2 +1,2 @@
-pika
-Flask
+flask==2.1.1
+pika==1.2.0

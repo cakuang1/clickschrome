@@ -12,7 +12,7 @@ document.addEventListener('click', function(event) {
         timestamp: new Date().toLocaleString() // Add the current date and time
     };
 
-    
+
     chrome.runtime.sendMessage({
         type: 'mouseClick',
         data: clickEventData

@@ -3,16 +3,28 @@ import psycopg2
 import os
 
 
+# Read PostgreSQL connection details from environment variables
+postgres_host = os.environ.get('POSTGRES_HOST', 'localhost')
+postgres_port = os.environ.get('POSTGRES_PORT', '5432')
+postgres_db = os.environ.get('POSTGRES_DB', 'webtracker')
+postgres_user = os.environ.get('POSTGRES_USER', 'postgres')
+postgres_password = os.environ.get('POSTGRES_PASSWORD', '')
 
-
-
+# Read RabbitMQ connection details from environment variables
+rabbitmq_host = os.environ.get('RABBITMQ_HOST', 'localhost')
+rabbitmq_port = os.environ.get('RABBITMQ_PORT', '5672')
 
 postgres_connection = psycopg2.connect(
-    host='postgres:5432',
-    database='webtracker',
-    user='postgres',
-    password=''
+    host=postgres_host,
+    port=postgres_port,
+    database=postgres_db,
+    user=postgres_user,
+    password=postgres_password
 )
+
+
+
+
 postgres_cursor = postgres_connection.cursor()
 
 
@@ -43,8 +55,7 @@ def callback(ch, method, properties, body):
         print("Error inserting data:", str(e))
 
 
-
-connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq',5672))
+connection = pika.BlockingConnection(pika.ConnectionParameters(rabbitmq_host,rabbitmq_port))
 channel = connection.channel()
 queue_name = 'clicks'
 channel.queue_declare(queue=queue_name)
