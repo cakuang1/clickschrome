@@ -1,7 +1,6 @@
 import pika
 import psycopg2
 import os
-import time
 import json
 
 
@@ -10,11 +9,11 @@ postgres_host = os.environ.get('POSTGRES_HOST', 'localhost')
 postgres_port = os.environ.get('POSTGRES_PORT', '5432')
 postgres_db = os.environ.get('POSTGRES_DB', 'webtracker')
 postgres_user = os.environ.get('POSTGRES_USER', 'postgres')
-postgres_password = os.environ.get('POSTGRES_PASSWORD', '')
+postgres_password = os.environ.get('POSTGRES_PASSWORD', 'password')
 
 # Read RabbitMQ connection details from environment variables
-rabbitmq_host = os.environ.get('RABBITMQ_HOST')
-rabbitmq_port = os.environ.get('RABBITMQ_PORT')
+rabbitmq_host = os.environ.get('RABBITMQ_HOST','localhost')
+rabbitmq_port = os.environ.get('RABBITMQ_PORT',5672)
 
 
 
@@ -42,10 +41,11 @@ def callback(ch, method, properties, body):
     print("Received message:", body)
     try:
         decoded_body = json.loads(body)  # Parse the JSON string to a dictionary
-        x = decoded_body.get('x')
-        y = decoded_body.get('y')
-        placeclicked = decoded_body.get('targetElement')
-        timestamp = decoded_body.get('timestamp')
+        x = decoded_body["clickData"].get('x')
+        y = decoded_body["clickData"].get('y')
+        placeclicked = decoded_body["clickData"].get('targetElement')
+        timestamp = decoded_body["clickData"].get('timestamp')
+        print(x,y,placeclicked,timestamp)
         sql = "INSERT INTO click_data (x, y, placeclicked, timestamp) VALUES (%s, %s, %s, %s)"
         values = (x, y, placeclicked, timestamp)
         postgres_cursor.execute(sql, values)
