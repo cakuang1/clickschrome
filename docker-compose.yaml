@@ -1,0 +1,38 @@
+version: '3'
+services:
+  # RabbitMQ service
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+      - "5672:5672"  # AMQP
+      - "15672:15672" # RabbitMQ Management UI
+    networks:
+      - mynetwork
+
+  # MySQL service with default root user
+  mysql:
+    image: "mysql:5.7"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: webtracker
+    networks:
+      - mynetwork
+
+  # Python consumer service
+  python-consumer:
+    build:
+      context: ./consumer  # Path to your Python consumer application
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: webtracker
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ''
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
