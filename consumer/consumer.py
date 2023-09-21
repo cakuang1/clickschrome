@@ -3,18 +3,32 @@ import psycopg2
 import os
 
 
-    
-postgres_connection = psycopg2.connect(
-    host='your_postgresql_host',
-    database='your_database_name',
-    user='your_username',
-    password='your_password'
-)
 
+
+
+
+postgres_connection = psycopg2.connect(
+    host='postgres:5432',
+    database='webtracker',
+    user='postgres',
+    password=''
+)
 postgres_cursor = postgres_connection.cursor()
 
 
+postgres_cursor.execute("""
+CREATE TABLE IF NOT EXISTS click_data (
+    id SERIAL PRIMARY KEY,
+    x INTEGER,
+    y INTEGER,
+    placeclicked VARCHAR(255),
+    timestamp TIMESTAMP
+);
+""")
+
+
 def callback(ch, method, properties, body):
+    
 
 
 

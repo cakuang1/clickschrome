@@ -1,36 +1,43 @@
 version: '3'
 services:
-  # RabbitMQ service
   rabbitmq:
     image: "rabbitmq:3-management"
     ports:
-      - "5672:5672"  # AMQP
-      - "15672:15672" # RabbitMQ Management UI
+      - "5672:5672"
+      - "15672:15672"
     networks:
       - mynetwork
-
-  # MySQL service with default root user
-  mysql:
-    image: "mysql:5.7"
+  postgres:
+    image: "postgres:latest"
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      MYSQL_DATABASE: webtracker
+      POSTGRES_DB: webtracker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ''
     networks:
       - mynetwork
 
-  # Python consumer service
   python-consumer:
     build:
-      context: ./consumer  # Path to your Python consumer application
+      context: ./consumer
     environment:
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
-      MYSQL_HOST: mysql
-      MYSQL_PORT: 3306
-      MYSQL_DATABASE: webtracker
-      MYSQL_USER: root
-      MYSQL_PASSWORD: ''
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: webtracker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ''
+    networks:
+      - mynetwork
+
+  python-producer:
+    build:
+      context: ./producer
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
     networks:
       - mynetwork
 
