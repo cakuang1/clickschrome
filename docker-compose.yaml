@@ -5,8 +5,7 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-    networks:
-      - mynetwork
+
   postgres:
     image: "postgres:latest"
     ports:
@@ -14,32 +13,6 @@ services:
     environment:
       POSTGRES_DB: webtracker
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ''
-    networks:
-      - mynetwork
+      POSTGRES_PASSWORD: password
 
-  python-consumer:
-    build:
-      context: ./consumer
-    environment:
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-      POSTGRES_DB: webtracker
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ''
-    networks:
-      - mynetwork
 
-  python-producer:
-    build:
-      context: ./producer
-    environment:
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
-    networks:
-      - mynetwork
-
-networks:
-  mynetwork:

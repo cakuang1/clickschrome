@@ -2,13 +2,17 @@ from flask import Flask, request, jsonify
 import pika
 import json
 import os
+from flask_cors import CORS
+
+
 
 app = Flask(__name__)
-
+CORS(app)
 # Read RabbitMQ connection details from environment variables
 rabbitmq_host = os.environ.get('RABBITMQ_HOST', 'localhost')
 rabbitmq_port = os.environ.get('RABBITMQ_PORT', '5672')
 rabbitmq_queue = 'clicks'
+
 
 @app.route('/send_click', methods=['POST'])
 def send_click():
@@ -22,6 +26,12 @@ def send_click():
         return jsonify({'message': 'Click data sent to RabbitMQ'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/test', methods=['GET'])
+def test():
+    return 'hello'
+
 
 if __name__ == '__main__':
     app.run(debug=True)

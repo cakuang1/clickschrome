@@ -5,9 +5,7 @@ console.log("Background is running")
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === 'mouseClick') {
     const clickEventData = request.data;
-    // Define the URL of your producer's endpoint
-    const producerEndpoint = 'http://127.0.0.1:5000/send_click';  // Replace with the actual URL
-    // Define the data to be sent in the POST request
+    const producerEndpoint = 'http://127.0.0.1:8000/send_click'; 
     const postData = {
       clickData: clickEventData,
     };
