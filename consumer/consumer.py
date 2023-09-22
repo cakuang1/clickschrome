@@ -4,18 +4,15 @@ import os
 import json
 
 
-# Read PostgreSQL connection details from environment variables
 postgres_host = os.environ.get('POSTGRES_HOST', 'localhost')
 postgres_port = os.environ.get('POSTGRES_PORT', '5432')
 postgres_db = os.environ.get('POSTGRES_DB', 'webtracker')
 postgres_user = os.environ.get('POSTGRES_USER', 'postgres')
 postgres_password = os.environ.get('POSTGRES_PASSWORD', 'password')
 
-# Read RabbitMQ connection details from environment variables
+
 rabbitmq_host = os.environ.get('RABBITMQ_HOST','localhost')
 rabbitmq_port = os.environ.get('RABBITMQ_PORT',5672)
-
-
 
 postgres_connection = psycopg2.connect(
     host=postgres_host,
@@ -24,6 +21,7 @@ postgres_connection = psycopg2.connect(
     user=postgres_user,
     password=postgres_password
 )
+
 postgres_cursor = postgres_connection.cursor()
 
 postgres_cursor.execute("""

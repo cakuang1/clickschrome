@@ -2,21 +2,36 @@
 <html>
 <head>
     <title>Heatmap Example</title>
-    <!-- Include heatmap.js library -->
-    <script src="path_to_heatmap.js"></script>
+    <style>
+        /* Add your CSS styles here */
+        .heatmap-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            opacity: 0.5; /* Initial opacity */
+            transition: opacity 0.3s; /* Smooth transition */
+            background-color: #333; /* Background color */
+            color: white; /* Text color */
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        /* Change opacity on hover */
+        .heatmap-button:hover {
+            opacity: 1;
+        }
+    </style>
+    <script src="{{ url_for('static', filename='js/heatmap.js') }}"></script>
 </head>
 <body>
-    <h1>Click Heatmap</h1>
     <div id="heatmap-container" style="width: 100%; height: 100vh;"></div>
+    <button class="heatmap-button">Clear Clicks</button>
     <script>
-        // JavaScript code to generate the heatmap
-        var heatmapData = {{ heatmap_data | tojson | safe }}; // Pass data from Flask to JavaScript
-
+        var heatmapData = {{ heatmap_data | tojson | safe }};
         var heatmapInstance = h337.create({
             container: document.getElementById('heatmap-container'),
             radius: 20
-        });
-
+        }); 
         heatmapInstance.setData({ data: heatmapData });
     </script>
 </body>
