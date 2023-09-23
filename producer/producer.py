@@ -65,5 +65,30 @@ def generate_heatmap():
     return render_template('heatmap.html', heatmap_data=heatmap_data)
 
 
+@app.route('/clearclicks', methods=['POST'])
+def clear_clicks():
+    try:
+        # Connect to the PostgreSQL database
+        postgres_connection = psycopg2.connect(
+            host=postgres_host,
+            port=postgres_port,
+            database=postgres_db,
+            user=postgres_user,
+            password=postgres_password
+        )
+        postgres_cursor = postgres_connection.cursor()
+
+        # Execute the SQL query to clear the click_data table
+        postgres_cursor.execute("DELETE FROM click_data")
+
+        # Commit the changes and close the database connection
+        postgres_connection.commit()
+        postgres_cursor.close()
+        postgres_connection.close()     
+        return render_template('heatmap.html', heatmap_data=[])
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)
