@@ -52,3 +52,6 @@ All your services should now be up and running and your producer should be loggi
 ![Alt Text](public/heatmap.png)
 
 
+### Debbuging
+
+Sometimes 
