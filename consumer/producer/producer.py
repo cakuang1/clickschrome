@@ -5,25 +5,17 @@ import os
 from flask_cors import CORS
 import psycopg2
 
-
-
 postgres_host = os.environ.get('POSTGRES_HOST', 'localhost')
 postgres_port = os.environ.get('POSTGRES_PORT', '5432')
 postgres_db = os.environ.get('POSTGRES_DB', 'webtracker')
 postgres_user = os.environ.get('POSTGRES_USER', 'postgres')
 postgres_password = os.environ.get('POSTGRES_PASSWORD', 'password')
-
-
 rabbitmq_host = os.environ.get('RABBITMQ_HOST','localhost')
 rabbitmq_port = os.environ.get('RABBITMQ_PORT',5672)
 
 
 app = Flask(__name__)
 CORS(app)
-# Read RabbitMQ connection details from environment variables
-rabbitmq_host = os.environ.get('RABBITMQ_HOST', 'localhost')
-rabbitmq_port = os.environ.get('RABBITMQ_PORT', '5672')
-
 
 
 @app.route('/send_click', methods=['POST'])
@@ -65,10 +57,9 @@ def generate_heatmap():
     return render_template('heatmap.html', heatmap_data=heatmap_data)
 
 
-@app.route('/clearclicks', methods=['POST'])
+@app.route('/clear-clicks', methods=['POST'])
 def clear_clicks():
     try:
-        # Connect to the PostgreSQL database
         postgres_connection = psycopg2.connect(
             host=postgres_host,
             port=postgres_port,
@@ -78,10 +69,7 @@ def clear_clicks():
         )
         postgres_cursor = postgres_connection.cursor()
 
-        # Execute the SQL query to clear the click_data table
         postgres_cursor.execute("DELETE FROM click_data")
-
-        # Commit the changes and close the database connection
         postgres_connection.commit()
         postgres_cursor.close()
         postgres_connection.close()     
