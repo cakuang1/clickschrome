@@ -54,4 +54,4 @@ All your services should now be up and running and your producer should be loggi
 
 ### Debbuging
 
-Sometimes 
+Sometimes clicks arent sending requests to the producer. One thing that fixed it for me was sending an intial request to http://127.0.0.1:5000/send_click through a chrome or your command line with no arguments.
