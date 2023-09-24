@@ -33,6 +33,16 @@
             radius: 20
         }); 
         heatmapInstance.setData({ data: heatmapData });
+        function clearClicks() {
+        // Clear the heatmapData array
+        heatmapData = [];
+        // Update the heatmap with the cleared data
+        heatmapInstance.setData({ data: heatmapData });
+    }
+
+    // Add a click event listener to the "Clear Clicks" button
+    var clearButton = document.getElementById('clear-button');
+    clearButton.addEventListener('click', clearClicks);
     </script>
 </body>
 </html>
